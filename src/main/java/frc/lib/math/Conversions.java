@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.lib.math;
 
 public class Conversions {
     
@@ -41,5 +41,4 @@ public class Conversions {
         double wheelRotations = wheelMeters / circumference;
         return wheelRotations;
     }
-
 }

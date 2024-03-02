@@ -6,18 +6,27 @@ package frc.robot;
 
 import java.io.File;
 
+import org.photonvision.PhotonCamera;
+
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
 import swervelib.math.SwerveMath;
@@ -36,13 +45,15 @@ public class RobotContainer {
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
       "swerve/neo"));
   private final Shooter s_Shooter = new Shooter();
-  // CommandJoystick rotationController = new CommandJoystick(1);
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  CommandJoystick driverController = new CommandJoystick(1);
+  private final Intake s_Intake = new Intake();
+  private final Climb s_Climb = new Climb();
+
+  NetworkTable VISION = NetworkTableInstance.getDefault().getTable("limelight");
 
   // CommandJoystick driverController = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   public static XboxController driverXbox = new XboxController(0);
+  public static XboxController mechXbox = new XboxController(1);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -50,18 +61,10 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    // Angle conversion factor is 360 / (GEAR RATIO)
-    // In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
-    // The encoder resolution per motor revolution is 1 per motor revolution.
-    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(150 / 7);
-    // Motor conversion factor is (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO).
-    // In this case the wheel diameter is 4 inches, which must be converted to
-    // meters to get meters/second.
-    // The gear ratio is 6.75 motor revolutions per wheel rotation.
-    // The encoder resolution per motor revolution is 1 per motor revolution.
-    System.out.println("\"conversionFactor\": {");
-    SmartDashboard.putNumber("\t\"angle\": ", angleConversionFactor);
-    System.out.println("}");
+    NamedCommands.registerCommand("StartIntake", s_Intake.StartIntake());
+    NamedCommands.registerCommand("StopIntake", s_Intake.StopIntake());
+    NamedCommands.registerCommand("StartShooter", s_Shooter.StartShooter());
+    NamedCommands.registerCommand("StopShooter", s_Shooter.StopShooter());
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -74,19 +77,24 @@ public class RobotContainer {
         () -> driverXbox.getRightX(),
         () -> driverXbox.getRightY());
 
+      
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
-    Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverXbox.getRightX());
 
-    s_Shooter
-        .setDefaultCommand(new RunCommand(() -> s_Shooter.RunShooter(driverXbox.getRightTriggerAxis()), s_Shooter));
+    //inverted bc gyro is upside down
+    Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
+      () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+      () -> driverXbox.getRightX());
+
+    // // // // // // // // s_Shooter
+    // // // // // // // //     .setDefaultCommand(new RunCommand(() -> s_Shooter.RunShooter(driverXbox.getRightTriggerAxis()), s_Shooter));
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    s_Climb.setDefaultCommand(new RunCommand(() -> s_Climb.move(mechXbox.getRightY()), s_Climb));
+    s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.run(driverXbox.getLeftTriggerAxis()), s_Intake));
     // !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle :
     // driveFieldOrientedDirectAngleSim);
   }
@@ -107,7 +115,16 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
+    //A Button
     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
+
+    new JoystickButton(driverXbox, 2).whileTrue((new RepeatCommand(drivebase.aimAtTarget(VISION))));
+
+    //Start Button
+    new JoystickButton(driverXbox, 8).onTrue(s_Climb.RunClimb());
+
+    //Back Button 
+    new JoystickButton(driverXbox, 7).onTrue(s_Climb.ResetClimb());
 
     // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new
     // InstantCommand(drivebase::lock, drivebase)));
@@ -120,7 +137,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Auto");
+    return null;
+    // // // // // // // // // return drivebase.getAutonomousCommand("New Auto");
   }
 
   public void setDriveMode() {
@@ -128,6 +146,6 @@ public class RobotContainer {
   }
 
   public void setMotorBrake(boolean brake) {
-    drivebase.setMotorBrake(brake);
+    // // // // // // // drivebase.setMotorBrake(brake);
   }
 }

@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -24,6 +25,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -148,15 +150,12 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param camera {@link PhotonCamera} to communicate with.
    * @return A {@link Command} which will run the alignment.
    */
-  public Command aimAtTarget(PhotonCamera camera) {
+  public Command aimAtTarget(NetworkTable camera) {
     return run(() -> {
-      PhotonPipelineResult result = camera.getLatestResult();
-      if (result.hasTargets()) {
-        drive(getTargetSpeeds(0,
-            0,
-            Rotation2d.fromDegrees(result.getBestTarget()
-                .getYaw()))); // Not sure if this will work, more math may be required.
-      }
+      driveCommand(() -> 0.0,
+            () -> 0.0,
+            () -> camera.getEntry("tx").getDouble(0)
+               ); // Not sure if this will work, more math may be required.
     });
   }
 

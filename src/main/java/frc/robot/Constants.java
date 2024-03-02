@@ -38,6 +38,23 @@ public final class Constants {
     public static final int m_FollowerID = 10;
   }
 
+    public static final class IntakeConstants {
+    public static final int m_Intake = 11;
+  }
+
+  public static final class ClimbConstants {
+    public static final int leadLimit = 0;
+    public static final int followLimit = 1;
+
+    public static final int leadMotor = 12;
+    public static final int followMotor = 13;
+  }
+
+  public static final class HoodConstants {
+    public static final int m_Lead = 14;
+    public static final int m_Follow = 15;
+  }
+  
   public static final class DrivebaseConstants {
 
     // Hold time on motor brakes when disabled

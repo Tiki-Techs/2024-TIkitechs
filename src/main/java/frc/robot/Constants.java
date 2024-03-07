@@ -36,9 +36,11 @@ public final class Constants {
   public static final class ShooterConstants {
     public static final int m_LeaderID = 9;
     public static final int m_FollowerID = 10;
+
+    public static final int m_IndexID = 15;
   }
 
-    public static final class IntakeConstants {
+  public static final class IntakeConstants {
     public static final int m_Intake = 11;
   }
 
@@ -52,9 +54,13 @@ public final class Constants {
 
   public static final class HoodConstants {
     public static final int m_Lead = 14;
-    public static final int m_Follow = 15;
+    public static final double encoderOffset = 40.0;
+    public static final double upperLimit = 65.0;
+    public static final double lowerLimit = 20.0;
+
+    public static final int EncoderID = 2;
   }
-  
+
   public static final class DrivebaseConstants {
 
     // Hold time on motor brakes when disabled
@@ -67,6 +73,8 @@ public final class Constants {
     public static final double LEFT_X_DEADBAND = 0.1;
     public static final double LEFT_Y_DEADBAND = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
+    public static final double DEADBAND = 0.1;
+
     public static final double TURN_CONSTANT = 6;
   }
 }

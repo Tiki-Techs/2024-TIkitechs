@@ -8,8 +8,6 @@ import java.io.File;
 import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -153,9 +151,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public Command aimAtTarget(NetworkTable camera) {
     return run(() -> {
       driveCommand(() -> 0.0,
-            () -> 0.0,
-            () -> camera.getEntry("tx").getDouble(0)
-               ); // Not sure if this will work, more math may be required.
+          () -> 0.0,
+          () -> camera.getEntry("tx").getDouble(0)); // Not sure if this will work, more math may be required.
     });
   }
 

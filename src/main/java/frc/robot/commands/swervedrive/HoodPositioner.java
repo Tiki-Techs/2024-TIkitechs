@@ -28,7 +28,6 @@ public class HoodPositioner extends Command {
     @Override
     public void execute() {
         // m_Leader.set(RobotContainer.mechXbox.getRightY()*0.2);
-
         if (Math.abs(mechController.getRightY()) > OperatorConstants.DEADBAND) {
             if ((mechController.getRightY() < 0 && hood.getRotation() > HoodConstants.lowerLimit)
                     || (mechController.getRightY() > 0 && hood.getRotation() < HoodConstants.upperLimit)) {
@@ -39,11 +38,6 @@ public class HoodPositioner extends Command {
             setpoint = hood.getRotation();
         } else {
 
-            if (RobotContainer.mechXbox.getXButton()) {
-                // go to intake side
-                setpoint = 65;
-            }
-
             // clamp between min and max value
             setpoint = Math.max(HoodConstants.lowerLimit, Math.min(setpoint, HoodConstants.upperLimit));
             m_Leader.set(hoodPID.calculate(hood.getRotation(), setpoint));
@@ -51,4 +45,5 @@ public class HoodPositioner extends Command {
 
     }
 
+    
 }

@@ -16,6 +16,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,12 +24,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutonConstants;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -148,11 +149,12 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param camera {@link PhotonCamera} to communicate with.
    * @return A {@link Command} which will run the alignment.
    */
-  public Command aimAtTarget(NetworkTable camera) {
+  public Command aimAtTarget() {
     return run(() -> {
       driveCommand(() -> 0.0,
           () -> 0.0,
-          () -> camera.getEntry("tx").getDouble(0)); // Not sure if this will work, more math may be required.
+          Rotation2d.fromDegrees(getHeading().getDegrees()).getRadians()); // Not sure if this will work, more math may
+                                                                           // be required.
     });
   }
 
@@ -213,6 +215,20 @@ public class SwerveSubsystem extends SubsystemBase {
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
           headingX.getAsDouble(),
           headingY.getAsDouble(),
+          swerveDrive.getOdometryHeading().getRadians(),
+          swerveDrive.getMaximumVelocity()));
+    });
+  }
+
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, double angle) {
+    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading
+    // correction for this kind of control.
+    return run(() -> {
+      double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
+      double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
+      // Make the robot move
+      driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
+          angle,
           swerveDrive.getOdometryHeading().getRadians(),
           swerveDrive.getMaximumVelocity()));
     });
@@ -281,14 +297,58 @@ public class SwerveSubsystem extends SubsystemBase {
   public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY,
       DoubleSupplier angularRotationX) {
     return run(() -> {
+      var fieldRelative = true;
+      var angle = Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity();
+      var speedX = Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity();
+      var speedY = Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity();
+      // while the A-button is pressed, overwrite some of the driving values with the
+      // output of our limelight methods
+      if (RobotContainer.driverXbox.getAButton()) {
+        final var rot_limelight = limelight_aim_proportional();
+        angle = rot_limelight;
+        speedX = speedX/8;
+        speedY = speedY/8;
+        // while using Limelight, turn off field-relative driving.
+        fieldRelative = true;
+      }
       // Make the robot move
-      swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity(),
-          Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity()),
-          Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
-          true,
+      swerveDrive.drive(new Translation2d(speedY,
+          speedX),
+          angle,
+          fieldRelative,
           false);
     });
   }
+
+  // simple proportional turning control with Limelight.
+  // "proportional control" is a control algorithm in which the output is
+  // proportional to the error.
+  // in this case, we are going to return an angular velocity that is proportional
+  // to the
+  // "tx" value from the Limelight.
+  double limelight_aim_proportional() {
+    // kP (constant of proportionality)
+    // this is a hand-tuned number that determines the aggressiveness of our
+    // proportional control loop
+    // if it is too high, the robot will oscillate around.
+    // if it is too low, the robot will never reach its target
+    // if the robot never turns in the correct direction, kP should be inverted.
+    double kP = .0125;
+
+    // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the
+    // rightmost edge of
+    // your limelight 3 feed, tx should return roughly 31 degrees.
+    double targetingAngularVelocity = Vision.angle * kP;
+
+    // convert to radians per second for our drive method
+    targetingAngularVelocity *= swerveDrive.getMaximumAngularVelocity();
+
+    // invert since tx is positive when the target is to the right of the crosshair
+    //targetingAngularVelocity *= -1.0;
+
+    return targetingAngularVelocity;
+  }
+
 
   /**
    * The primary method for controlling the drivebase. Takes a

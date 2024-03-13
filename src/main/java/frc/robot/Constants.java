@@ -4,10 +4,16 @@
 
 package frc.robot;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.pathplanner.lib.util.PIDConstants;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.Shooter.State;
 import swervelib.math.Matter;
 
 /**
@@ -33,11 +39,29 @@ public final class Constants {
     public static final PIDConstants ANGLE_PID = new PIDConstants(0.4, 0, 0.01);
   }
 
+  public static class LED {
+    public static final int redAlliance = 3;
+    public static final int blueAlliance = 4;
+    public static final int Ready = 5;
+  }
+
   public static final class ShooterConstants {
     public static final int m_LeaderID = 9;
     public static final int m_FollowerID = 10;
 
     public static final int m_IndexID = 15;
+
+    public static final List<Entry<Double, State>> SHOOTER_MAP = Arrays.asList(
+        Map.entry(0.0, new State(0, 63)),
+        Map.entry(1.63, new State(3500, 58)),
+        Map.entry(1.97, new State(4000, 50)),
+        Map.entry(2.47, new State(5700, 42)),
+        Map.entry(3.1, new State(5700, 38)),
+        Map.entry(3.5, new State(5700, 34.5)),
+        Map.entry(3.65, new State(5700, 34.5)),
+        Map.entry(3.8, new State(5700, 33.5)),
+        Map.entry(3.9, new State(5700, 33.5)),
+        Map.entry(6.0, new State(5700, 31)));
   }
 
   public static final class IntakeConstants {
@@ -54,9 +78,9 @@ public final class Constants {
 
   public static final class HoodConstants {
     public static final int m_Lead = 14;
-    public static final double encoderOffset = 40.0;
+    public static final double encoderOffset = 277.0;
     public static final double upperLimit = 65.0;
-    public static final double lowerLimit = 20.0;
+    public static final double lowerLimit = 30.0;
 
     public static final int EncoderID = 2;
   }

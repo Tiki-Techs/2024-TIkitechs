@@ -18,12 +18,13 @@ public class Climb extends SubsystemBase {
     public CANSparkMax m_follow = new CANSparkMax(ClimbConstants.followMotor, MotorType.kBrushless);
 
     int leadForward = 1;
-    int followForward = -1;
+    int followForward = 1;
     boolean lifted1 = false;
     boolean lifted2 = false;
     boolean setClimb1 = false;
     boolean setClimb2 = false;
-
+    boolean reversed1 = false;
+    boolean reversed2 = false;
     public Climb() {
     }
 
@@ -31,7 +32,18 @@ public class Climb extends SubsystemBase {
         if (Math.abs(speed) < OperatorConstants.DEADBAND) {
             lifted1 = true;
             lifted2 = true;
-
+            if(!reversed1){
+                leadForward *=-1;
+                reversed1 = true;
+            }
+            if(!reversed2){
+                followForward *=-1;
+                reversed2 = true;
+            }
+        }
+        else{
+            reversed1 = false;
+            reversed2 = false;
         }
 
         if (lifted2 == true || (FollowClimbLimit.get())) {
@@ -53,7 +65,6 @@ public class Climb extends SubsystemBase {
     public void periodic() {
         if (!LeadClimbLimit.get()) {
             if(!setClimb1){
-                leadForward *= -1;
                 lifted1 = false;
                 setClimb1 = true;
             }
@@ -65,7 +76,6 @@ public class Climb extends SubsystemBase {
 
         if (!FollowClimbLimit.get()) {
             if(!setClimb2){
-                followForward *= -1;
                 lifted2 = false;
                 setClimb2 = true;
             }

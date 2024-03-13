@@ -16,27 +16,110 @@
     },
     {
       "anchor": {
-        "x": 1.4161765140625828,
+        "x": 3.230075975821467,
         "y": 5.518363150743376
       },
       "prevControl": {
-        "x": 0.012877980969785874,
-        "y": 5.518363150743376
+        "x": 2.718456718964718,
+        "y": 5.539147357539714
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
     {
-      "waypointRelativePos": 0.0,
-      "rotationDegrees": 180.0,
-      "rotateFast": true
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Aim And Shoot"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 2.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Fire"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 2.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Stop Shooter"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Start Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Stop Intake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Aim And Shoot"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 2.0
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Fire"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Stop Shooter"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
-  "constraintZones": [],
-  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

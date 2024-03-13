@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.HoodConstants;
+import frc.robot.commands.swervedrive.HoodPositioner;
 
 public class Hood extends SubsystemBase {
 
@@ -15,6 +16,7 @@ public class Hood extends SubsystemBase {
     public double kP = 0.01;
 
     public Hood() {
+        SmartDashboard.putNumber("Hood Setpoint", 65);
     }
 
     public double getRotation() {
@@ -23,8 +25,10 @@ public class Hood extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Hood PID", hoodPID.calculate(getRotation(), 35));
+        SmartDashboard.putNumber("Hood PID", hoodPID.calculate(getRotation(), HoodPositioner.setpoint));
+        SmartDashboard.putNumber("Hood Setpoint", HoodPositioner.setpoint);
         SmartDashboard.putNumber("Hood Angle", getRotation());
+        
     }
 
 }

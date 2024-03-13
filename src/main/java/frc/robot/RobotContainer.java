@@ -6,11 +6,19 @@ package frc.robot;
 
 import java.io.File;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -22,21 +30,27 @@ import frc.robot.commands.swervedrive.HoodPositioner;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lights;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
       "swerve/neo"));
-  private final Shooter s_Shooter = new Shooter();
+  public static final Shooter s_Shooter = new Shooter();
   private final Intake s_Intake = new Intake();
   private final Climb s_Climb = new Climb();
   public static final Hood s_Hood = new Hood();
-
+  public final Vision s_Vision = new Vision();
+  public final Lights s_Lights = new Lights();
   public static XboxController driverXbox = new XboxController(0);
   public static XboxController mechXbox = new XboxController(1);
+
+  private static AprilTagFieldLayout m_fieldLayout;
+  private final SendableChooser<Command> autoChooser;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -44,10 +58,16 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    // NamedCommands.registerCommand("StartIntake", s_Intake.StartIntake());
-    // NamedCommands.registerCommand("StopIntake", s_Intake.StopIntake());
-    NamedCommands.registerCommand("StartShooter", s_Shooter.StartShooter());
-    NamedCommands.registerCommand("StopShooter", s_Shooter.StopShooter());
+    NamedCommands.registerCommand("Start Intake", s_Intake.StartIntake());
+    NamedCommands.registerCommand("Stop Intake", s_Intake.StopIntake());
+    NamedCommands.registerCommand("Aim And Shoot", s_Shooter.AutoShoot());
+    NamedCommands.registerCommand("Fire", s_Shooter.Fire());
+    NamedCommands.registerCommand("Stop Shooter", s_Shooter.StopShooter());
+    AutoBuilder autochooser = new AutoBuilder();
+    m_fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    // PV estimates will always be blue
+    m_fieldLayout.setOrigin(AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide);
+     autoChooser = AutoBuilder.buildAutoChooser("Default Auto");
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -70,12 +90,13 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX());
 
-    s_Shooter.setDefaultCommand(new RunCommand(() -> s_Shooter.RunShooter(mechXbox.getRightTriggerAxis()), s_Shooter));
+    s_Shooter.setDefaultCommand(new RunCommand(() -> s_Shooter.RunShooter(mechXbox.getRightTriggerAxis(), false), s_Shooter));
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-    s_Climb.setDefaultCommand(new RunCommand(() -> s_Climb.move(mechXbox.getLeftTriggerAxis()), s_Climb));
+    s_Climb.setDefaultCommand(new RunCommand(() -> s_Climb.move(mechXbox.getLeftTriggerAxis()*0.2), s_Climb));
     s_Hood.setDefaultCommand(new HoodPositioner(s_Hood));
     s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.run(), s_Intake));
   }
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
@@ -91,9 +112,17 @@ public class RobotContainer {
    * Flight joysticks}.
    */
   private void configureBindings() {
-    // A Button
-    new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    // Y Button
+    new JoystickButton(driverXbox, 4).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    new JoystickButton(mechXbox, 1).onFalse(new InstantCommand(() -> s_Shooter.quickReverse()));
+  }
 
+  private static AprilTag speakerSupplier() {
+    return DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue
+        ?
+        // blue speaker
+        new AprilTag(7, m_fieldLayout.getTagPose(7).get())
+        : new AprilTag(4, m_fieldLayout.getTagPose(4).get());
   }
 
   /**
@@ -103,7 +132,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+
+    // Create a path following command using AutoBuilder. This will also trigger
+    // event markers.
+    return autoChooser.getSelected();
   }
 
   public void setDriveMode() {

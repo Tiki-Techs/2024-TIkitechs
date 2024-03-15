@@ -10,7 +10,7 @@ import frc.robot.commands.swervedrive.HoodPositioner;
 
 public class Hood extends SubsystemBase {
 
-    DutyCycleEncoder rotEncoder = new DutyCycleEncoder(HoodConstants.EncoderID);
+    public DutyCycleEncoder rotEncoder = new DutyCycleEncoder(HoodConstants.EncoderID);
     public PIDController hoodPID = new PIDController(0.002, 0, 0);
 
     public double kP = 0.01;

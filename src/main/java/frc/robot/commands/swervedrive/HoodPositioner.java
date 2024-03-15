@@ -14,12 +14,12 @@ import frc.robot.subsystems.Hood;
 public class HoodPositioner extends Command {
     public static double setpoint;
     public PIDController hoodPID = new PIDController(0.015, 0, 0);
-    CANSparkMax m_Leader = new CANSparkMax(HoodConstants.m_Lead, MotorType.kBrushless);
+    public CANSparkMax m_Leader = new CANSparkMax(HoodConstants.m_Lead, MotorType.kBrushless);
     Hood hood;
     XboxController mechController;
 
     public HoodPositioner(Hood self) {
-        setpoint = self.getRotation();
+        setpoint = 65;
         hood = self;
         mechController = RobotContainer.mechXbox;
         addRequirements(self);
@@ -28,6 +28,7 @@ public class HoodPositioner extends Command {
     @Override
     public void execute() {
         // m_Leader.set(RobotContainer.mechXbox.getRightY()*0.2);
+        try{
         if (Math.abs(mechController.getRightY()) > OperatorConstants.DEADBAND) {
             if ((mechController.getRightY() < 0 && hood.getRotation() > HoodConstants.lowerLimit)
                     || (mechController.getRightY() > 0 && hood.getRotation() < HoodConstants.upperLimit)) {
@@ -42,7 +43,11 @@ public class HoodPositioner extends Command {
             setpoint = Math.max(HoodConstants.lowerLimit, Math.min(setpoint, HoodConstants.upperLimit));
             m_Leader.set(hoodPID.calculate(hood.getRotation(), setpoint));
         }
+        }catch(Exception e){
+            setpoint = Math.max(HoodConstants.lowerLimit, Math.min(setpoint, HoodConstants.upperLimit));
+            m_Leader.set(hoodPID.calculate(hood.getRotation(), setpoint));
 
+        } 
     }
 
     

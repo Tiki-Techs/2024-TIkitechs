@@ -25,15 +25,15 @@ public class Shooter extends SubsystemBase {
     CANSparkFlex m_leader = new CANSparkFlex(ShooterConstants.m_LeaderID, MotorType.kBrushless);
     CANSparkFlex m_Follower = new CANSparkFlex(ShooterConstants.m_FollowerID, MotorType.kBrushless);
 
-    CANSparkMax index = new CANSparkMax(ShooterConstants.m_IndexID, MotorType.kBrushless);
+    public CANSparkMax index = new CANSparkMax(ShooterConstants.m_IndexID, MotorType.kBrushless);
 
-    private SparkPIDController m_pidController;
+    public SparkPIDController m_pidController;
     private RelativeEncoder m_encoder;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
     private static final SplineInterpolator SPLINE_INTERPOLATOR = new SplineInterpolator();
     private PolynomialSplineFunction m_shooterAngleCurve;
     private PolynomialSplineFunction m_shooterFlywheelCurve;
-    double setpoint = 0;
+    public double setpoint = 0;
     private final Timer m_timer = new Timer();
 
     // Ultrasonic rangeFinder = new Ultrasonic(3, 4);
@@ -98,7 +98,6 @@ public class Shooter extends SubsystemBase {
             setpoint = getAutomaticState().speed;
             HoodPositioner.setpoint = getAutomaticState().angle;
         }
-        m_pidController.setReference(setpoint, ControlType.kVelocity);
         SmartDashboard.putNumber("Shooter SetPoint", setpoint);
         SmartDashboard.putNumber("ProcessVariable", m_encoder.getVelocity());
     }
@@ -137,7 +136,7 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
+        m_pidController.setReference(setpoint, ControlType.kVelocity);
     }
 
     public static class State {

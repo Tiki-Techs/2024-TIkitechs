@@ -17,8 +17,8 @@ public class Climb extends SubsystemBase {
     public CANSparkMax m_lead = new CANSparkMax(ClimbConstants.leadMotor, MotorType.kBrushless);
     public CANSparkMax m_follow = new CANSparkMax(ClimbConstants.followMotor, MotorType.kBrushless);
 
-    int leadForward = 1;
-    int followForward = 1;
+    int leadForward = -1;
+    int followForward = -1;
     boolean lifted1 = false;
     boolean lifted2 = false;
     boolean setClimb1 = false;
@@ -45,7 +45,7 @@ public class Climb extends SubsystemBase {
             reversed1 = false;
             reversed2 = false;
         }
-
+        speed = speed*0.5;
         if (lifted2 == true || (FollowClimbLimit.get())) {
             m_follow.set(speed * followForward);
         }

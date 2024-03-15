@@ -52,10 +52,12 @@ public final class Constants {
     public static final int m_IndexID = 15;
 
     public static final List<Entry<Double, State>> SHOOTER_MAP = Arrays.asList(
-        Map.entry(0.0, new State(0, 63)),
-        Map.entry(1.63, new State(3500, 58)),
-        Map.entry(1.97, new State(4000, 50)),
-        Map.entry(2.47, new State(5700, 42)),
+        Map.entry(0.0, new State(4000, 55.5)),
+        Map.entry(1.59, new State(4000, 55.5)),
+        Map.entry(1.66, new State(5700, 53.8)),
+        Map.entry(1.83, new State(5700, 51.5)),
+        Map.entry(2.06, new State(5700, 46.8)),
+        Map.entry(2.34, new State(5700, 42.2)),
         Map.entry(3.1, new State(5700, 38)),
         Map.entry(3.5, new State(5700, 34.5)),
         Map.entry(3.65, new State(5700, 34.5)),

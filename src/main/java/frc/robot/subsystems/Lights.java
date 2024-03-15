@@ -27,9 +27,9 @@ public class Lights extends SubsystemBase {
             }
         }
 
-        if(Math.abs(RobotContainer.s_Hood.getRotation()-RobotContainer.s_Shooter.getAutomaticState().angle) < RobotContainer.s_Shooter.getAutomaticState().angle*Error()
-         && Math.abs(RobotContainer.s_Shooter.getVelocity()-RobotContainer.s_Shooter.getAutomaticState().speed) < RobotContainer.s_Shooter.getAutomaticState().speed * (Error()*1.5)
-         && Vision.angle < 3)
+        if(Math.abs(RobotContainer.s_Hood.getRotation()-RobotContainer.s_Shooter.getAutomaticState().angle) < 1
+         && Math.abs(RobotContainer.s_Shooter.getVelocity()-RobotContainer.s_Shooter.getAutomaticState().speed) < RobotContainer.s_Shooter.getAutomaticState().speed * (0.10)
+         && Vision.angle < 5)
         {
             ready.set(false);
         }

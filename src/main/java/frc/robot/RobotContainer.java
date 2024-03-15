@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.HoodPositioner;
+import frc.robot.commands.swervedrive.auto.SimpleAuto;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
@@ -48,6 +49,7 @@ public class RobotContainer {
   public final Lights s_Lights = new Lights();
   public static XboxController driverXbox = new XboxController(0);
   public static XboxController mechXbox = new XboxController(1);
+  public static final HoodPositioner positioner = new HoodPositioner(s_Hood);
 
   private static AprilTagFieldLayout m_fieldLayout;
   private final SendableChooser<Command> autoChooser;
@@ -86,14 +88,15 @@ public class RobotContainer {
     // left stick controls translation
     // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX());
 
     s_Shooter.setDefaultCommand(new RunCommand(() -> s_Shooter.RunShooter(mechXbox.getRightTriggerAxis(), false), s_Shooter));
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-    s_Climb.setDefaultCommand(new RunCommand(() -> s_Climb.move(mechXbox.getLeftTriggerAxis()*0.2), s_Climb));
-    s_Hood.setDefaultCommand(new HoodPositioner(s_Hood));
+    s_Climb.setDefaultCommand(new RunCommand(() -> s_Climb.move(mechXbox.getLeftTriggerAxis()), s_Climb));
+    
+    s_Hood.setDefaultCommand(positioner);
     s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.run(), s_Intake));
   }
 
@@ -135,7 +138,7 @@ public class RobotContainer {
 
     // Create a path following command using AutoBuilder. This will also trigger
     // event markers.
-    return autoChooser.getSelected();
+    return new SimpleAuto(drivebase, s_Shooter, s_Intake, s_Hood, false);
   }
 
   public void setDriveMode() {

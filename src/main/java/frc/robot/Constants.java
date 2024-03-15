@@ -55,14 +55,13 @@ public final class Constants {
         Map.entry(0.0, new State(4000, 55.5)),
         Map.entry(1.59, new State(4000, 55.5)),
         Map.entry(1.66, new State(5700, 53.8)),
-        Map.entry(1.83, new State(5700, 51.5)),
+        Map.entry(1.83, new State(5700, 51)),
         Map.entry(2.06, new State(5700, 46.8)),
         Map.entry(2.34, new State(5700, 42.2)),
-        Map.entry(3.1, new State(5700, 38)),
-        Map.entry(3.5, new State(5700, 34.5)),
-        Map.entry(3.65, new State(5700, 34.5)),
-        Map.entry(3.8, new State(5700, 33.5)),
-        Map.entry(3.9, new State(5700, 33.5)),
+        Map.entry(2.78, new State(5700, 37.75)),
+        Map.entry(3.24, new State(5700, 34)),
+        Map.entry(3.79, new State(5700, 30.5)),
+        Map.entry(3.9, new State(5700, 30)),
         Map.entry(6.0, new State(5700, 31)));
   }
 

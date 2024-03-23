@@ -39,7 +39,7 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+  public static final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
       "swerve/neo"));
   public static final Shooter s_Shooter = new Shooter();
   private final Intake s_Intake = new Intake();
@@ -53,23 +53,29 @@ public class RobotContainer {
 
   private static AprilTagFieldLayout m_fieldLayout;
   private final SendableChooser<Command> autoChooser;
+  private final String middleAuto = "Mid Side Auto";
+  private final String ampSideAuto = "Amp Side Auto";
+  private final String feedSideAuto = "Feeder Side Auto";
+
 
   /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
+   *s The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-    NamedCommands.registerCommand("Start Intake", s_Intake.StartIntake());
-    NamedCommands.registerCommand("Stop Intake", s_Intake.StopIntake());
-    NamedCommands.registerCommand("Aim And Shoot", s_Shooter.AutoShoot());
+    NamedCommands.registerCommand("StartIntake", s_Intake.StartIntake());
+    NamedCommands.registerCommand("StopIntake", s_Intake.StopIntake());
+    NamedCommands.registerCommand("Preload", s_Shooter.preloadShot());
+        NamedCommands.registerCommand("AutoAimer", s_Shooter.AimAuto());
     NamedCommands.registerCommand("Fire", s_Shooter.Fire());
-    NamedCommands.registerCommand("Stop Shooter", s_Shooter.StopShooter());
+    NamedCommands.registerCommand("StopShooter", s_Shooter.StopShooter());
     AutoBuilder autochooser = new AutoBuilder();
     m_fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     // PV estimates will always be blue
     m_fieldLayout.setOrigin(AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide);
-     autoChooser = AutoBuilder.buildAutoChooser("Default Auto");
+    
+     autoChooser = AutoBuilder.buildAutoChooser(middleAuto);
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -138,7 +144,8 @@ public class RobotContainer {
 
     // Create a path following command using AutoBuilder. This will also trigger
     // event markers.
-    return new SimpleAuto(drivebase, s_Shooter, s_Intake, s_Hood, false);
+    return //autoChooser.getSelected();
+    new SimpleAuto(drivebase, s_Shooter, s_Intake, s_Hood, false);
   }
 
   public void setDriveMode() {

@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0138839138077134,
+        "y": 4.256672217048139
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.294543620426272,
+        "y": 5.051874719134054
+      },
+      "isLocked": false,
+      "linkedName": "MI 3"
+    },
+    {
+      "anchor": {
+        "x": 2.76230979812387,
+        "y": 6.946327738809324
+      },
+      "prevControl": {
+        "x": 1.5695060449949962,
+        "y": 6.151125236723409
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 26.565051177078022,
+    "rotateFast": true
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

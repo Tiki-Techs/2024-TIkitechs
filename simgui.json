@@ -1,0 +1,26 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [9]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX (v6)[4]/Rotor Sensor": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/navX-Sensor[4]": "Gyro"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}

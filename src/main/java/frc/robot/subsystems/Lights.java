@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
@@ -32,9 +33,12 @@ public class Lights extends SubsystemBase {
          && Vision.angle < 5)
         {
             ready.set(false);
+            RobotContainer.mechXbox.setRumble(RumbleType.kBothRumble, 1);
         }
         else{
             ready.set(true);
+            RobotContainer.mechXbox.setRumble(RumbleType.kBothRumble, 0);
+
         }
     }
 

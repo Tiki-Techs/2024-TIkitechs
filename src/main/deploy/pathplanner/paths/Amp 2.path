@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.3236292113609864,
+        "y": 6.958021893251764
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.2336292113609866,
+        "y": 6.958021893251764
+      },
+      "isLocked": false,
+      "linkedName": "End of Amp 1"
+    },
+    {
+      "anchor": {
+        "x": 2.6921448714692304,
+        "y": 6.64
+      },
+      "prevControl": {
+        "x": 2.675606839656247,
+        "y": 6.64
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "End of Amp 2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 25.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Amp Outside",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

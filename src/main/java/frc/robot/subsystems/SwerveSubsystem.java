@@ -24,6 +24,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -53,6 +55,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public double maximumSpeed = Units.feetToMeters(14.5);
 
   private boolean DirectAngleDrive = true;
+  StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault().getStructTopic("/MyPose", Pose2d.struct).publish();
+
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -308,7 +312,6 @@ public class SwerveSubsystem extends SubsystemBase {
         angle = rot_limelight;
         speedX = speedX/8;
         speedY = speedY/8;
-        // while using Limelight, turn off field-relative driving.
         fieldRelative = true;
       }
       // Make the robot move
@@ -319,7 +322,18 @@ public class SwerveSubsystem extends SubsystemBase {
           false);
     });
   }
-
+  public void aimAtSpeaker() {
+            final var rot_limelight = limelight_aim_proportional();
+      
+      
+      // Make the robot move
+      swerveDrive.drive(new Translation2d(0,
+          0),
+          rot_limelight,
+          true,
+          false);
+  
+  }
   // simple proportional turning control with Limelight.
   // "proportional control" is a control algorithm in which the output is
   // proportional to the error.
@@ -400,6 +414,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+        publisher.set(getPose());
   }
 
   @Override
@@ -585,4 +600,5 @@ public class SwerveSubsystem extends SubsystemBase {
   public void addFakeVisionReading() {
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
   }
+ 
 }

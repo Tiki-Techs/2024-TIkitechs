@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0464983328762547,
+        "y": 4.272825786078258
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.69214487146923,
+        "y": 1.719040703038672
+      },
+      "isLocked": false,
+      "linkedName": "End of Feeder 2"
+    },
+    {
+      "anchor": {
+        "x": 8.153314996088682,
+        "y": 0.7718141932010376
+      },
+      "prevControl": {
+        "x": 7.206088486251045,
+        "y": 1.1577212898015548
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "End of Feeder 3"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Feeder Outside",
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

@@ -77,27 +77,25 @@ public class SimpleAuto extends Command {
     autoyAxis, autoxAxis);
     Translation2d stop = new Translation2d(0.0,0.0);
     while (m_timer.get() < 3) {
-          RobotContainer.s_Shooter.m_pidController.setReference(4500, ControlType.kVelocity);
-          RobotContainer.positioner.m_Leader.set(RobotContainer.positioner.hoodPID.calculate(RobotContainer.s_Hood.getRotation(), 57));
+         // RobotContainer.s_Shooter.m_pidController.setReference(4500, ControlType.kVelocity);
+          //RobotContainer.positioner.m_Leader.set(RobotContainer.positioner.hoodPID.calculate(RobotContainer.s_Hood.getRotation(), 57));
       //dont do anything
     } 
-    // while (m_timer.get() < 0.9) {
-    //   arm.setShoulderSpeed(-0.3);
-    //   //arm.setElbowSpeed(0.3);
-    // }
-    
-  //
+ 
 
     while (m_timer.get() < (3.5)) {
-      shooter.index.set(-1);
+      //shooter.index.set(-1);
     }
 
-      shooter.index.set(0);
+      //shooter.index.set(0);
 
-    while (m_timer.get() < 8.5) {
-          RobotContainer.s_Shooter.m_pidController.setReference(0, ControlType.kVelocity);
-          var setpoint = Math.max(HoodConstants.lowerLimit, Math.min(65, HoodConstants.upperLimit));
-          RobotContainer.positioner.m_Leader.set(RobotContainer.positioner.hoodPID.calculate(RobotContainer.s_Hood.getRotation(), setpoint));
+      while (m_timer.get() < 10) {
+        
+      }
+    while (m_timer.get() < 15) {
+          //RobotContainer.s_Shooter.m_pidController.setReference(0, ControlType.kVelocity);
+          //var setpoint = Math.max(HoodConstants.lowerLimit, Math.min(65, HoodConstants.upperLimit));
+          //RobotContainer.positioner.m_Leader.set(RobotContainer.positioner.hoodPID.calculate(RobotContainer.s_Hood.getRotation(), setpoint));
         swerve.drive(translation, rotAxis, fieldRelative);
     }
     swerve.drive(stop, rotAxis, fieldRelative);

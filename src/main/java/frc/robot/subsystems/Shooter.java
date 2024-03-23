@@ -13,12 +13,12 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.swervedrive.HoodPositioner;
-import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.commands.swervedrive.HoodPositioner;
 
 public class Shooter extends SubsystemBase {
 
@@ -70,65 +70,71 @@ public class Shooter extends SubsystemBase {
         double[] distances = new double[shooterMap.size()];
         double[] flywheelSpeeds = new double[shooterMap.size()];
         double[] angles = new double[shooterMap.size()];
-    
+
         for (int i = 0; i < shooterMap.size(); i++) {
-          distances[i] = shooterMap.get(i).getKey();
-          flywheelSpeeds[i] = shooterMap.get(i).getValue().speed;
-          angles[i] = shooterMap.get(i).getValue().angle;
+            distances[i] = shooterMap.get(i).getKey();
+            flywheelSpeeds[i] = shooterMap.get(i).getValue().speed;
+            angles[i] = shooterMap.get(i).getValue().angle;
         }
 
         m_shooterFlywheelCurve = SPLINE_INTERPOLATOR.interpolate(distances, flywheelSpeeds);
         m_shooterAngleCurve = SPLINE_INTERPOLATOR.interpolate(distances, angles);
-    
+
     }
 
     public void RunShooter(double speed, boolean auto) {
-        setpoint =  speed * maxRPM;
-        
+        setpoint = speed * maxRPM;
+
         if (RobotContainer.mechXbox.getAButton() || RobotContainer.mechXbox.getBButton()) {
             index.set(-1);
-        } 
-        else if (RobotContainer.mechXbox.getXButton()) {
+        } else if (RobotContainer.mechXbox.getXButton()) {
             index.set(0.5);
         } else {
             index.set(0);
         }
-        
-        if(RobotContainer.mechXbox.getRightBumper() || auto){
-            setpoint = getAutomaticState().speed;
-            HoodPositioner.setpoint = getAutomaticState().angle;
+
+        if (RobotContainer.mechXbox.getRightBumper() || auto) {
+            if (Vision.distance != 0) {
+                setpoint = getAutomaticState().speed;
+                HoodPositioner.setpoint = getAutomaticState().angle;
+            }
         }
         SmartDashboard.putNumber("Shooter SetPoint", setpoint);
         SmartDashboard.putNumber("ProcessVariable", m_encoder.getVelocity());
     }
 
-    public double getVelocity(){
+    public double getVelocity() {
         return m_encoder.getVelocity();
     }
 
     public void quickReverse() {
         m_timer.reset();
         m_timer.start();
-        while (m_timer.get()<0.2) {
+        while (m_timer.get() < 0.2) {
             index.set(0.5);
         }
     }
 
-    public Command AutoShoot() {
-        return new RunCommand(() -> {
-            quickReverse();
-            RunShooter(0, true);
-        }
-            , this);
+    public Command preloadShot() {
+        return new InstantCommand(() -> {
+            Timer a_timer = new Timer();
+            a_timer.reset();
+            a_timer.start();
+            while (a_timer.get() < 3) {
+                m_pidController.setReference(4500, ControlType.kVelocity);
+                RobotContainer.positioner.m_Leader
+                        .set(RobotContainer.positioner.hoodPID.calculate(RobotContainer.s_Hood.getRotation(), 63));
+            }
+        }, this);
     }
 
     public State getAutomaticState() {
         var targetDistance = getTargetDistance();
-         var flywheelSpeed = m_shooterFlywheelCurve.value(targetDistance);
-         var angle = m_shooterAngleCurve.value(targetDistance);
-    
-         return new State(flywheelSpeed ,angle);
-      }
+        var flywheelSpeed = m_shooterFlywheelCurve.value(targetDistance);
+        var angle = m_shooterAngleCurve.value(targetDistance);
+
+        return new State(flywheelSpeed, angle);
+    }
 
     private double getTargetDistance() {
         return Vision.distance;
@@ -150,12 +156,56 @@ public class Shooter extends SubsystemBase {
     }
 
     public Command Fire() {
-        return new RunCommand(() -> index.set(-1), this);
+        return new InstantCommand(
+                () -> {
+                    Timer a_timer = new Timer();
+                    a_timer.reset();
+                    a_timer.start();
+                    while (a_timer.get() < 1) {
+                        m_pidController.setReference(5700, ControlType.kVelocity);
+                        index.set(-1);
+                    }
+                    index.set(0);
+                }, this);
     }
-    public Command StopShooter(){
-        return new RunCommand(()->{
-            RunShooter(0, false);
-            index.set(0);
+
+    public Command StopShooter() {
+        return new InstantCommand(() -> {
+            Timer a_timer = new Timer();
+            a_timer.reset();
+            a_timer.start();
+            m_leader.set(0);
+            while (a_timer.get() < 1) {
+                m_pidController.setReference(0, ControlType.kVelocity);
+                m_leader.set(0);
+                if (RobotContainer.s_Hood.getRotation() < 67) {
+                    RobotContainer.positioner.m_Leader
+                            .set(RobotContainer.positioner.hoodPID.calculate(RobotContainer.s_Hood.getRotation(), 67));
+                } else {
+                    RobotContainer.positioner.m_Leader.set(0);
+                }
+            }
+            RobotContainer.positioner.m_Leader.set(0);
+        }, this);
+    }
+
+    public Command AimAuto() {
+        return new InstantCommand(() -> {
+            Timer a_timer = new Timer();
+            a_timer.reset();
+            a_timer.start();
+            while (a_timer.get() < 3) {
+                m_pidController.setReference(getAutomaticState().speed, ControlType.kVelocity);
+                if (Vision.distance != 0) {
+                    var set = Math.max(HoodConstants.lowerLimit,
+                            Math.min(getAutomaticState().angle, HoodConstants.upperLimit));
+                    RobotContainer.positioner.m_Leader
+                            .set(RobotContainer.positioner.hoodPID.calculate(RobotContainer.s_Hood.getRotation(), set));
+                }
+                else{
+                    RobotContainer.positioner.m_Leader.set(0);
+                }
+            }
         }, this);
     }
 }

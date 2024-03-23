@@ -56,13 +56,15 @@ public final class Constants {
         Map.entry(1.59, new State(4000, 55.5)),
         Map.entry(1.66, new State(5700, 53.8)),
         Map.entry(1.83, new State(5700, 51)),
-        Map.entry(2.06, new State(5700, 46.8)),
-        Map.entry(2.34, new State(5700, 42.2)),
-        Map.entry(2.78, new State(5700, 37.75)),
-        Map.entry(3.24, new State(5700, 34)),
-        Map.entry(3.79, new State(5700, 30.5)),
-        Map.entry(3.9, new State(5700, 30)),
-        Map.entry(6.0, new State(5700, 31)));
+        Map.entry(2.08, new State(5700, 47.5)),
+        Map.entry(2.5, new State(5700, 42.2)),
+        Map.entry(2.86, new State(5700, 38)),
+        Map.entry(3.14, new State(5700, 36)),
+                Map.entry(3.5, new State(5700, 34)),
+
+        Map.entry(3.86, new State(5700, 32.5)),
+        Map.entry(3.9, new State(5700, 32.5)),
+        Map.entry(6.0, new State(5700, 32.5)));
   }
 
   public static final class IntakeConstants {
@@ -79,9 +81,10 @@ public final class Constants {
 
   public static final class HoodConstants {
     public static final int m_Lead = 14;
-    public static final double encoderOffset = 277.0;
-    public static final double upperLimit = 65.0;
-    public static final double lowerLimit = 30.0;
+    public static final int m_Follow = 16;
+    public static final double encoderOffset = -20.0;
+    public static final double upperLimit = 66.0;
+    public static final double lowerLimit = 32.0;
 
     public static final int EncoderID = 2;
   }
@@ -95,10 +98,10 @@ public final class Constants {
   public static class OperatorConstants {
 
     // Joystick Deadband
-    public static final double LEFT_X_DEADBAND = 0.1;
-    public static final double LEFT_Y_DEADBAND = 0.1;
-    public static final double RIGHT_X_DEADBAND = 0.1;
-    public static final double DEADBAND = 0.1;
+    public static final double LEFT_X_DEADBAND = 0.15;
+    public static final double LEFT_Y_DEADBAND = 0.15;
+    public static final double RIGHT_X_DEADBAND = 0.15;
+    public static final double DEADBAND = 0.15;
 
     public static final double TURN_CONSTANT = 6;
   }

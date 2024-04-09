@@ -10,11 +10,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.HoodConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.RobotContainer;
@@ -97,7 +99,13 @@ public class Shooter extends SubsystemBase {
             if (Vision.distance != 0) {
                 setpoint = getAutomaticState().speed;
                 HoodPositioner.setpoint = getAutomaticState().angle;
+            } else {
+                setpoint = 5700;
             }
+        }
+        if (RobotContainer.mechXbox.getPOV() == 0) {
+            setpoint = 5700;
+            HoodPositioner.setpoint = Constants.HoodConstants.LobAngle;
         }
         SmartDashboard.putNumber("Shooter SetPoint", setpoint);
         SmartDashboard.putNumber("ProcessVariable", m_encoder.getVelocity());
@@ -115,19 +123,6 @@ public class Shooter extends SubsystemBase {
         }
     }
 
-    public Command preloadShot() {
-        return new InstantCommand(() -> {
-            Timer a_timer = new Timer();
-            a_timer.reset();
-            a_timer.start();
-            while (a_timer.get() < 3) {
-                m_pidController.setReference(4500, ControlType.kVelocity);
-                RobotContainer.positioner.m_Leader
-                        .set(RobotContainer.positioner.hoodPID.calculate(RobotContainer.s_Hood.getRotation(), 63));
-            }
-        }, this);
-    }
-
     public State getAutomaticState() {
         var targetDistance = getTargetDistance();
         var flywheelSpeed = m_shooterFlywheelCurve.value(targetDistance);
@@ -142,7 +137,11 @@ public class Shooter extends SubsystemBase {
 
     @Override
     public void periodic() {
-        m_pidController.setReference(setpoint, ControlType.kVelocity);
+        if (setpoint != 0) {
+            m_pidController.setReference(setpoint, ControlType.kVelocity);
+        } else {
+            m_leader.set(0);
+        }
     }
 
     public static class State {
@@ -161,8 +160,17 @@ public class Shooter extends SubsystemBase {
                     Timer a_timer = new Timer();
                     a_timer.reset();
                     a_timer.start();
-                    while (a_timer.get() < 1) {
+                    while (a_timer.get() < 0.5) {
                         m_pidController.setReference(5700, ControlType.kVelocity);
+                        if (Vision.distance != 0) {
+                            var set = Math.max(HoodConstants.lowerLimit,
+                                    Math.min(getAutomaticState().angle, HoodConstants.upperLimit));
+                            RobotContainer.positioner.m_Leader
+                                    .set(RobotContainer.positioner.hoodPID
+                                            .calculate(RobotContainer.s_Hood.getRotation(), set));
+                        } else {
+                            RobotContainer.positioner.m_Leader.set(0);
+                        }
                         index.set(-1);
                     }
                     index.set(0);
@@ -175,7 +183,7 @@ public class Shooter extends SubsystemBase {
             a_timer.reset();
             a_timer.start();
             m_leader.set(0);
-            while (a_timer.get() < 1) {
+            while (a_timer.get() < 0.5) {
                 m_pidController.setReference(0, ControlType.kVelocity);
                 m_leader.set(0);
                 if (RobotContainer.s_Hood.getRotation() < 67) {
@@ -194,15 +202,20 @@ public class Shooter extends SubsystemBase {
             Timer a_timer = new Timer();
             a_timer.reset();
             a_timer.start();
-            while (a_timer.get() < 3) {
-                m_pidController.setReference(getAutomaticState().speed, ControlType.kVelocity);
+            while (a_timer.get() < 1) {
+                m_pidController.setReference(5700, ControlType.kVelocity);
+
+                RobotContainer.drivebase.drive(new Translation2d(0,
+                        0),
+                        0,
+                        true);
+
                 if (Vision.distance != 0) {
                     var set = Math.max(HoodConstants.lowerLimit,
                             Math.min(getAutomaticState().angle, HoodConstants.upperLimit));
                     RobotContainer.positioner.m_Leader
                             .set(RobotContainer.positioner.hoodPID.calculate(RobotContainer.s_Hood.getRotation(), set));
-                }
-                else{
+                } else {
                     RobotContainer.positioner.m_Leader.set(0);
                 }
             }

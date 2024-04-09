@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.35,
-      "y": 5.55
+      "x": 1.3,
+      "y": 5.55472336015897
     },
-    "rotation": 0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -38,13 +38,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Mid 1"
+            "pathName": "Mid Alt"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "StopIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid Alt 2"
           }
         },
         {
@@ -74,7 +80,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Mid 2"
+            "pathName": "Mid Alt 3"
           }
         },
         {
@@ -86,7 +92,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Mid 3"
+            "pathName": "Mid Alt 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAimer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
           }
         }
       ]

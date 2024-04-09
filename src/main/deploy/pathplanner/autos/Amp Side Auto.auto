@@ -2,55 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8327743151212798,
-      "y": 6.572114796651245
+      "x": 1.4057878828008366,
+      "y": 6.5136440244390466
     },
-    "rotation": 57.26477372789242
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "AutoAimer"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartIntake"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Amp Path"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Amp 2"
+            "pathName": "Amp Inside 0"
           }
         },
         {
@@ -80,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp 3"
+            "pathName": "Amp Inside 1"
           }
         },
         {
@@ -92,7 +56,67 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp 4"
+            "pathName": "Amp Inside 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAimer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Inside 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Inside 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAimer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
           }
         }
       ]

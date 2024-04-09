@@ -28,7 +28,7 @@ public class Hood extends SubsystemBase {
         SmartDashboard.putNumber("Hood PID", hoodPID.calculate(getRotation(), HoodPositioner.setpoint));
         SmartDashboard.putNumber("Hood Setpoint", HoodPositioner.setpoint);
         SmartDashboard.putNumber("Hood Angle", getRotation());
-        
+
     }
 
 }

@@ -2,55 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.72,
-      "y": 4.432
+      "x": 1.382399573915957,
+      "y": 4.490555305896938
     },
-    "rotation": -60.96673673607674
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "AutoAimer"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Fire"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopShooter"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartIntake"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Feeder 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Feeder 2"
+            "pathName": "Feeder 0"
           }
         },
         {
@@ -80,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Feeder 3"
+            "pathName": "Feeder Inside 1"
           }
         },
         {
@@ -92,7 +56,67 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Feeder 4"
+            "pathName": "Feeder Inside 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAimer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Feeder Inside 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Feeder Inside 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoAimer"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Fire"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopShooter"
           }
         }
       ]

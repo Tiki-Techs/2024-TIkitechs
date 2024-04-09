@@ -3,47 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9026396514331485,
-        "y": 5.55472336015897
+        "x": 1.4057878828008366,
+        "y": 6.5136440244390466
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0489663771350335,
-        "y": 5.227287035770654
+        "x": 1.3239288017037572,
+        "y": 6.841080348827365
       },
       "isLocked": false,
-      "linkedName": "End of MI 1"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.62197994481459,
-        "y": 4.116342363738859
+        "x": 0.8444684695637196,
+        "y": 6.677362186633205
       },
       "prevControl": {
-        "x": 1.4759528094554764,
-        "y": 4.151424827066179
+        "x": 1.0783515584125183,
+        "y": 6.864468657712245
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "End of MI 2"
+      "linkedName": "AI 0"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
-    "rotateFast": false
+    "rotation": 56.82148834094988,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Amp Inside",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

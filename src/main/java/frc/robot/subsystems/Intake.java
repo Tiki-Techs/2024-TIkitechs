@@ -39,13 +39,13 @@ public class Intake extends SubsystemBase {
         return new InstantCommand(() -> {
             m_timer.reset();
             m_timer.start();
-            while (m_timer.get() < 1) {
+            while (m_timer.get() < 0.5) {
                 mot.set(1);
                 RobotContainer.s_Shooter.index.set(-1);
             }
             mot.set(0);
 
-            while (m_timer.get() < 1.2) {
+            while (m_timer.get() < 0.7) {
                 RobotContainer.s_Shooter.index.set(0.5);
             }
             RobotContainer.s_Shooter.index.set(0);

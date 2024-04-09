@@ -16,7 +16,6 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -31,8 +30,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.AutonConstants;
+import frc.robot.RobotContainer;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -55,8 +54,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public double maximumSpeed = Units.feetToMeters(14.5);
 
   private boolean DirectAngleDrive = true;
-  StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault().getStructTopic("/MyPose", Pose2d.struct).publish();
-
+  StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault().getStructTopic("/MyPose", Pose2d.struct)
+      .publish();
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -118,7 +117,7 @@ public class SwerveSubsystem extends SubsystemBase {
         this::getPose, // Robot pose supplier
         this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        this::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        this::setChassisSpeedsAuto, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
             AutonConstants.TRANSLATION_PID,
             // Translation PID constants
@@ -310,8 +309,8 @@ public class SwerveSubsystem extends SubsystemBase {
       if (RobotContainer.driverXbox.getAButton()) {
         final var rot_limelight = limelight_aim_proportional();
         angle = rot_limelight;
-        speedX = speedX/8;
-        speedY = speedY/8;
+        speedX = speedX / 8;
+        speedY = speedY / 8;
         fieldRelative = true;
       }
       // Make the robot move
@@ -322,18 +321,7 @@ public class SwerveSubsystem extends SubsystemBase {
           false);
     });
   }
-  public void aimAtSpeaker() {
-            final var rot_limelight = limelight_aim_proportional();
-      
-      
-      // Make the robot move
-      swerveDrive.drive(new Translation2d(0,
-          0),
-          rot_limelight,
-          true,
-          false);
-  
-  }
+
   // simple proportional turning control with Limelight.
   // "proportional control" is a control algorithm in which the output is
   // proportional to the error.
@@ -358,11 +346,10 @@ public class SwerveSubsystem extends SubsystemBase {
     targetingAngularVelocity *= swerveDrive.getMaximumAngularVelocity();
 
     // invert since tx is positive when the target is to the right of the crosshair
-    //targetingAngularVelocity *= -1.0;
+    // targetingAngularVelocity *= -1.0;
 
     return targetingAngularVelocity;
   }
-
 
   /**
    * The primary method for controlling the drivebase. Takes a
@@ -414,7 +401,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-        publisher.set(getPose());
+    publisher.set(getPose());
   }
 
   @Override
@@ -424,7 +411,7 @@ public class SwerveSubsystem extends SubsystemBase {
   /**
    * Get the swerve drive kinematics object.
    *
-   * @return {@link SwerveDriveKinematics} of the swerve drive.
+   * @return {@link SwerveDriveKinematics} of zthe swerve drive.
    */
   public SwerveDriveKinematics getKinematics() {
     return swerveDrive.kinematics;
@@ -460,6 +447,11 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void setChassisSpeeds(ChassisSpeeds chassisSpeeds) {
     swerveDrive.setChassisSpeeds(chassisSpeeds);
+  }
+
+  public void setChassisSpeedsAuto(ChassisSpeeds chassisSpeeds) {
+    swerveDrive.setChassisSpeeds(new ChassisSpeeds(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond,
+        -chassisSpeeds.omegaRadiansPerSecond));
   }
 
   /**
@@ -600,5 +592,5 @@ public class SwerveSubsystem extends SubsystemBase {
   public void addFakeVisionReading() {
     swerveDrive.addVisionMeasurement(new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
   }
- 
+
 }

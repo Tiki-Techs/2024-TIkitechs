@@ -8,7 +8,6 @@ import java.io.File;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -19,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -53,30 +53,27 @@ public class RobotContainer {
 
   private static AprilTagFieldLayout m_fieldLayout;
   private final SendableChooser<Command> autoChooser;
-  private final String middleAuto = "Mid Side Auto";
+  private final String middleAuto = "Mid Auto";
   private final String ampSideAuto = "Amp Side Auto";
-  private final String feedSideAuto = "Feeder Side Auto";
-
+  private final String sourceSideAuto = "Source Side Auto";
 
   /**
-   *s The container for the robot. Contains subsystems, OI devices, and commands.
+   * s The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
     NamedCommands.registerCommand("StartIntake", s_Intake.StartIntake());
     NamedCommands.registerCommand("StopIntake", s_Intake.StopIntake());
-    NamedCommands.registerCommand("Preload", s_Shooter.preloadShot());
-        NamedCommands.registerCommand("AutoAimer", s_Shooter.AimAuto());
+    NamedCommands.registerCommand("AutoAimer", s_Shooter.AimAuto());
     NamedCommands.registerCommand("Fire", s_Shooter.Fire());
     NamedCommands.registerCommand("StopShooter", s_Shooter.StopShooter());
-    AutoBuilder autochooser = new AutoBuilder();
     m_fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     // PV estimates will always be blue
     m_fieldLayout.setOrigin(AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide);
-    
-     autoChooser = AutoBuilder.buildAutoChooser(middleAuto);
 
+    autoChooser = AutoBuilder.buildAutoChooser(middleAuto);
+    autoChooser.addOption("Simple Auto (Max Delay)", new SimpleAuto(drivebase, s_Shooter, s_Intake, s_Hood, false));
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
@@ -98,14 +95,16 @@ public class RobotContainer {
         () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
         () -> driverXbox.getRightX());
 
-    s_Shooter.setDefaultCommand(new RunCommand(() -> s_Shooter.RunShooter(mechXbox.getRightTriggerAxis(), false), s_Shooter));
+    s_Shooter.setDefaultCommand(
+        new RunCommand(() -> s_Shooter.RunShooter(mechXbox.getRightTriggerAxis(), false), s_Shooter));
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     s_Climb.setDefaultCommand(new RunCommand(() -> s_Climb.move(mechXbox.getLeftTriggerAxis()), s_Climb));
-    
+
     s_Hood.setDefaultCommand(positioner);
     s_Intake.setDefaultCommand(new RunCommand(() -> s_Intake.run(), s_Intake));
-  }
+    SmartDashboard.putData("Auto Chooser", autoChooser);
 
+  }
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be
@@ -140,19 +139,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
+    return autoChooser.getSelected();
 
-    // Create a path following command using AutoBuilder. This will also trigger
-    // event markers.
-    return //autoChooser.getSelected();
-    new SimpleAuto(drivebase, s_Shooter, s_Intake, s_Hood, false);
   }
 
-  public void setDriveMode() {
-    // drivebase.setDefaultCommand();
-  }
-
-  public void setMotorBrake(boolean brake) {
-    // // // // // // // drivebase.setMotorBrake(brake);
-  }
 }

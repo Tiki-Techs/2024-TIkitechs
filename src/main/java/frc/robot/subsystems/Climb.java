@@ -25,6 +25,7 @@ public class Climb extends SubsystemBase {
     boolean setClimb2 = false;
     boolean reversed1 = false;
     boolean reversed2 = false;
+
     public Climb() {
     }
 
@@ -32,31 +33,28 @@ public class Climb extends SubsystemBase {
         if (Math.abs(speed) < OperatorConstants.DEADBAND) {
             lifted1 = true;
             lifted2 = true;
-            if(!reversed1){
-                leadForward *=-1;
+            if (!reversed1) {
+                leadForward *= -1;
                 reversed1 = true;
             }
-            if(!reversed2){
-                followForward *=-1;
+            if (!reversed2) {
+                followForward *= -1;
                 reversed2 = true;
             }
-        }
-        else{
+        } else {
             reversed1 = false;
             reversed2 = false;
         }
-        speed = speed*0.5;
+        speed = speed * 0.5;
         if (lifted2 == true || (FollowClimbLimit.get())) {
             m_follow.set(speed * followForward);
-        }
-        else{
+        } else {
             m_follow.set(0);
         }
 
         if (lifted1 == true || (LeadClimbLimit.get())) {
             m_lead.set(speed * leadForward);
-        }
-        else{
+        } else {
             m_lead.set(0);
         }
     }
@@ -64,31 +62,26 @@ public class Climb extends SubsystemBase {
     @Override
     public void periodic() {
         if (!LeadClimbLimit.get()) {
-            if(!setClimb1){
+            if (!setClimb1) {
                 lifted1 = false;
                 setClimb1 = true;
             }
 
-        }
-        else{
+        } else {
             setClimb1 = false;
         }
 
         if (!FollowClimbLimit.get()) {
-            if(!setClimb2){
+            if (!setClimb2) {
                 lifted2 = false;
                 setClimb2 = true;
             }
-        }
-        else{
+        } else {
             setClimb2 = false;
         }
-    
 
         SmartDashboard.putBoolean("Lead Climb Limit Switch", LeadClimbLimit.get());
         SmartDashboard.putBoolean("Follow Climb Limit Switch", FollowClimbLimit.get());
-
-        SmartDashboard.putNumber("Lead Climb ENC", m_lead.getEncoder().getPosition());
     }
 
 }

@@ -52,16 +52,16 @@ public final class Constants {
     public static final int m_IndexID = 15;
 
     public static final List<Entry<Double, State>> SHOOTER_MAP = Arrays.asList(
-        Map.entry(0.0, new State(4000, 55.5)),
+        Map.entry(0.0, new State(4000, 57)),
+        Map.entry(1.54, new State(4000, 60)),
         Map.entry(1.59, new State(4000, 55.5)),
         Map.entry(1.66, new State(5700, 53.8)),
         Map.entry(1.83, new State(5700, 51)),
-        Map.entry(2.08, new State(5700, 47.5)),
+        Map.entry(2.19, new State(5700, 47)),
         Map.entry(2.5, new State(5700, 42.2)),
         Map.entry(2.86, new State(5700, 38)),
         Map.entry(3.14, new State(5700, 36)),
-                Map.entry(3.5, new State(5700, 34)),
-
+        Map.entry(3.5, new State(5700, 34)),
         Map.entry(3.86, new State(5700, 32.5)),
         Map.entry(3.9, new State(5700, 32.5)),
         Map.entry(6.0, new State(5700, 32.5)));
@@ -82,11 +82,12 @@ public final class Constants {
   public static final class HoodConstants {
     public static final int m_Lead = 14;
     public static final int m_Follow = 16;
-    public static final double encoderOffset = -20.0;
+    public static final double encoderOffset = 161;
     public static final double upperLimit = 66.0;
     public static final double lowerLimit = 32.0;
 
-    public static final int EncoderID = 2;
+    public static final double LobAngle = 45;
+    public static final int EncoderID = 6;
   }
 
   public static final class DrivebaseConstants {

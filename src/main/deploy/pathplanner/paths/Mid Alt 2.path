@@ -3,47 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.211785768300881,
-        "y": 7.425788070949362
+        "x": 2.855863033663389,
+        "y": 5.566417514601411
       },
       "prevControl": null,
       "nextControl": {
-        "x": 9.211785768300881,
-        "y": 7.425788070949362
+        "x": 2.62197994481459,
+        "y": 5.55472336015897
       },
       "isLocked": false,
-      "linkedName": "End of Amp 3"
+      "linkedName": "End of MI 2"
     },
     {
       "anchor": {
-        "x": 2.6921448714692304,
-        "y": 6.64
+        "x": 1.4993411183403562,
+        "y": 5.566417514601411
       },
       "prevControl": {
-        "x": 1.6921448714692304,
-        "y": 6.64
+        "x": 1.7916949794013555,
+        "y": 5.578111669043852
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "End of Amp 2"
+      "linkedName": "End Of Mid Alt 2"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 25.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Amp Outside",
+  "folder": "Mid Inside",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

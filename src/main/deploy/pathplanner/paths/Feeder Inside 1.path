@@ -3,49 +3,49 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.62197994481459,
-        "y": 4.116342363738859
+        "x": 0.7392210795817603,
+        "y": 4.385307915914978
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.294543620426272,
-        "y": 4.1046482092964185
+        "x": 1.943718987153074,
+        "y": 4.128036518181299
       },
       "isLocked": false,
-      "linkedName": "End of MI 2"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.0138839138077134,
-        "y": 4.256672217048139
+        "x": 2.7155331803541096,
+        "y": 4.092954054853979
       },
       "prevControl": {
-        "x": 2.3647085470809115,
-        "y": 4.139730672623739
+        "x": 1.7566125160740347,
+        "y": 4.420390379242297
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MI 3"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -25.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Feeder Inside",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -58.980642327038055,
     "velocity": 0
   },
   "useDefaultConstraints": true

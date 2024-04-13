@@ -147,21 +147,6 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Aim the robot at the target returned by PhotonVision.
-   *
-   * @param camera {@link PhotonCamera} to communicate with.
-   * @return A {@link Command} which will run the alignment.
-   */
-  public Command aimAtTarget() {
-    return run(() -> {
-      driveCommand(() -> 0.0,
-          () -> 0.0,
-          Rotation2d.fromDegrees(getHeading().getDegrees()).getRadians()); // Not sure if this will work, more math may
-                                                                           // be required.
-    });
-  }
-
-  /**
    * Get the path follower with events.
    *
    * @param pathName PathPlanner path name.

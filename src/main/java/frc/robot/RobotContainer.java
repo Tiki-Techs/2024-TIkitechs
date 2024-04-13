@@ -96,7 +96,7 @@ public class RobotContainer {
         () -> driverXbox.getRightX());
 
     s_Shooter.setDefaultCommand(
-        new RunCommand(() -> s_Shooter.RunShooter(mechXbox.getRightTriggerAxis(), false), s_Shooter));
+        new RunCommand(() -> s_Shooter.RunShooter(mechXbox.getRightTriggerAxis()), s_Shooter));
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     s_Climb.setDefaultCommand(new RunCommand(() -> s_Climb.move(mechXbox.getLeftTriggerAxis()), s_Climb));
 
@@ -123,14 +123,6 @@ public class RobotContainer {
     // Y Button
     new JoystickButton(driverXbox, 4).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(mechXbox, 1).onFalse(new InstantCommand(() -> s_Shooter.quickReverse()));
-  }
-
-  private static AprilTag speakerSupplier() {
-    return DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Blue
-        ?
-        // blue speaker
-        new AprilTag(7, m_fieldLayout.getTagPose(7).get())
-        : new AprilTag(4, m_fieldLayout.getTagPose(4).get());
   }
 
   /**

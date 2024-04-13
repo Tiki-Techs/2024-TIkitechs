@@ -30,10 +30,6 @@ import swervelib.math.Matter;
  */
 public final class Constants {
 
-  public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-  public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-  public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
-
   public static final class AutonConstants {
     public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
     public static final PIDConstants ANGLE_PID = new PIDConstants(0.4, 0, 0.01);
@@ -50,7 +46,7 @@ public final class Constants {
     public static final int m_FollowerID = 10;
 
     public static final int m_IndexID = 15;
-
+public static final int IRSensor_ID = 9;
     public static final List<Entry<Double, State>> SHOOTER_MAP = Arrays.asList(
         Map.entry(0.0, new State(4000, 57)),
         Map.entry(1.54, new State(4000, 60)),
@@ -86,6 +82,7 @@ public final class Constants {
     public static final double upperLimit = 66.0;
     public static final double lowerLimit = 32.0;
 
+    public static final double AutoOffset = 1.5;
     public static final double LobAngle = 45;
     public static final int EncoderID = 6;
   }
@@ -101,9 +98,6 @@ public final class Constants {
     // Joystick Deadband
     public static final double LEFT_X_DEADBAND = 0.15;
     public static final double LEFT_Y_DEADBAND = 0.15;
-    public static final double RIGHT_X_DEADBAND = 0.15;
     public static final double DEADBAND = 0.15;
-
-    public static final double TURN_CONSTANT = 6;
   }
 }

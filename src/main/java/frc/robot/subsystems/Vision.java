@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -25,10 +26,5 @@ public class Vision extends SubsystemBase {
 
         SmartDashboard.putNumber("tx", angle);
         // CameraServer.startAutomaticCapture();
-
     }
-
-    // if(getTag(0)){
-
-    // }
 }

@@ -33,39 +33,62 @@ public class HoodPositioner extends Command {
 
     @Override
     public void execute() {
-        // m_Leader.set(RobotContainer.mechXbox.getRightY()*0.2);
+        // first check if the encoder is equal to 0. It should only be zero if it is
+        // unplugged.
+        // and if it unplugged, we should stop running the hood.
         if (hood.rotEncoder.getAbsolutePosition() != 0) {
             try {
+
+                // Checks if the right stick on the mech controller is being moved by lani
                 if (Math.abs(mechController.getRightY()) > OperatorConstants.DEADBAND) {
+
+                    // if it is, we make sure that we arent trying to move the hood into itself.
+                    // ie if getRightY() is negative, we need to make sure that the hood is above
+                    // its lower limit otherwise it will run into itself.
                     if ((mechController.getRightY() < 0 && hood.getRotation() > HoodConstants.lowerLimit)
                             || (mechController.getRightY() > 0 && hood.getRotation() < HoodConstants.upperLimit)) {
+
+                        // check that the limit switches arent pressed as a backup
                         if ((mechController.getRightY() < 0 && lowerLimitSwitch.get())
                                 || (mechController.getRightY() > 0 && upperLimitSwitch.get())) {
+                            // manually control the hood
                             m_Leader.set(mechController.getRightY() * 0.3);
                         } else {
+                            // set the motor to zero when it is not being moved.
                             m_Leader.set(0);
                         }
                     } else {
+                        // set the motor to zero when it is not being moved.
                         m_Leader.set(0);
                     }
+                    // set the new setpoint of the hood to where the hood currently is, that way the
+                    // pid isnt fighting lani if she is controlling it manually.
                     setpoint = hood.getRotation();
-                } else {
+                }
 
-                    // clamp between min and max value
+                else {
+
+                    // clamp setpoint between min and max value so it doesnt try to go to a position
+                    // it cant reach and run into itself
                     setpoint = Math.max(HoodConstants.lowerLimit, Math.min(setpoint, HoodConstants.upperLimit));
+
+                    // makes sure that its not trying to go in the direction of a pressed limit
+                    // switch
                     if ((hoodPID.calculate(hood.getRotation(), setpoint) < 0 && lowerLimitSwitch.get())
                             || (hoodPID.calculate(hood.getRotation(), setpoint) > 0 && upperLimitSwitch.get())) {
+                        // sets the motor to the value of the pid.
                         m_Leader.set(hoodPID.calculate(hood.getRotation(), setpoint));
                     } else {
+                        // sets the motor to zero if it is trying to go towards a pressed limit switch.
                         m_Leader.set(0);
                     }
                 }
             } catch (Exception e) {
-                setpoint = Math.max(HoodConstants.lowerLimit, Math.min(setpoint, HoodConstants.upperLimit));
-                m_Leader.set(hoodPID.calculate(hood.getRotation(), setpoint));
+                m_Leader.set(0);
 
             }
         } else {
+            // sets the hood to stop running if the encoder is unplugged.
             m_Leader.set(0);
         }
         SmartDashboard.putBoolean("Upper Limit Switch", upperLimitSwitch.get());

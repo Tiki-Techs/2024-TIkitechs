@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LED;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class Lights extends SubsystemBase {
@@ -40,7 +41,20 @@ public class Lights extends SubsystemBase {
             ready.set(true);
             RobotContainer.mechXbox.setRumble(RumbleType.kBothRumble, 0);
             Fire = false;
-
+        }
+        if (RobotContainer.mechXbox.getPOV() == 0) {
+            if (Math.abs(RobotContainer.s_Hood.getRotation() - Constants.HoodConstants.LobAngle) < 1
+                    && Math.abs(RobotContainer.s_Shooter.getVelocity()
+                            - 5700) < 5700 * (0.10)
+                    && Vision.angle < 5) {
+                ready.set(false);
+                RobotContainer.mechXbox.setRumble(RumbleType.kBothRumble, 1);
+                Fire = true;
+            } else {
+                ready.set(true);
+                RobotContainer.mechXbox.setRumble(RumbleType.kBothRumble, 0);
+                Fire = false;
+            }
         }
         SmartDashboard.putBoolean("Ready to Fire", Fire);
 

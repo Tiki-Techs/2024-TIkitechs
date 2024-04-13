@@ -13,13 +13,13 @@ public class Hood extends SubsystemBase {
     public DutyCycleEncoder rotEncoder = new DutyCycleEncoder(HoodConstants.EncoderID);
     public PIDController hoodPID = new PIDController(0.002, 0, 0);
 
-    public double kP = 0.01;
-
     public Hood() {
         SmartDashboard.putNumber("Hood Setpoint", 65);
     }
 
     public double getRotation() {
+        // is what is used by other classes to get the rotation of the hood.
+        // converts the absolute encoder (0 to 1) to degrees (0 to 360) and subtracts the encoder offset.  
         return Rotation2d.fromRotations(rotEncoder.getAbsolutePosition()).getDegrees() - HoodConstants.encoderOffset;
     }
 

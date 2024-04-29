@@ -9,12 +9,9 @@ import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -56,6 +53,10 @@ public class RobotContainer {
   private final String middleAuto = "Mid Auto";
   private final String ampSideAuto = "Amp Side Auto";
   private final String sourceSideAuto = "Source Side Auto";
+  private final String middleAuto4 = "Middle Auto 4";
+  private final String Citrus = "Citrus";
+
+  public static Boolean overrideNoteSensor = true;
 
   /**
    * s The container for the robot. Contains subsystems, OI devices, and commands.
@@ -72,8 +73,14 @@ public class RobotContainer {
     // PV estimates will always be blue
     m_fieldLayout.setOrigin(AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide);
 
-    autoChooser = AutoBuilder.buildAutoChooser(middleAuto);
+    autoChooser = new SendableChooser<Command>();
+    autoChooser.setDefaultOption("Mid Auto", AutoBuilder.buildAuto(middleAuto));
+    autoChooser.addOption("Amp Side Auto", AutoBuilder.buildAuto(ampSideAuto));
+    autoChooser.addOption("Source Side Auto", AutoBuilder.buildAuto(sourceSideAuto));
+    autoChooser.addOption("Middle Auto 4", AutoBuilder.buildAuto(middleAuto4));
+    autoChooser.addOption("Citrus", AutoBuilder.buildAuto(Citrus));
     autoChooser.addOption("Simple Auto (Max Delay)", new SimpleAuto(drivebase, s_Shooter, s_Intake, s_Hood, false));
+
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
@@ -123,6 +130,14 @@ public class RobotContainer {
     // Y Button
     new JoystickButton(driverXbox, 4).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(mechXbox, 1).onFalse(new InstantCommand(() -> s_Shooter.quickReverse()));
+    new JoystickButton(driverXbox, 3).onTrue(drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND), () -> 0, () -> 1));
+    // right stick
+    // new JoystickButton(driverXbox, 2).onTrue((new
+    // InstantCommand(drivebase::zeroGyro)))
+    // new JoystickButton(mechXbox, 10).onTrue(new InstantCommand(() ->
+    // overrideNoteSensor = !overrideNoteSensor));
   }
 
   /**

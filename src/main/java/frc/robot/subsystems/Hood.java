@@ -19,7 +19,8 @@ public class Hood extends SubsystemBase {
 
     public double getRotation() {
         // is what is used by other classes to get the rotation of the hood.
-        // converts the absolute encoder (0 to 1) to degrees (0 to 360) and subtracts the encoder offset.  
+        // converts the absolute encoder (0 to 1) to degrees (0 to 360) and subtracts
+        // the encoder offset.
         return Rotation2d.fromRotations(rotEncoder.getAbsolutePosition()).getDegrees() - HoodConstants.encoderOffset;
     }
 

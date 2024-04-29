@@ -67,7 +67,6 @@ public class HoodPositioner extends Command {
                 }
 
                 else {
-
                     // clamp setpoint between min and max value so it doesnt try to go to a position
                     // it cant reach and run into itself
                     setpoint = Math.max(HoodConstants.lowerLimit, Math.min(setpoint, HoodConstants.upperLimit));

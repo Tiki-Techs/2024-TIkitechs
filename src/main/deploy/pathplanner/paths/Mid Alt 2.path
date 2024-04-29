@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.62197994481459,
-        "y": 5.55472336015897
+        "x": 3.0858630336633888,
+        "y": 5.566417514601411
       },
       "isLocked": false,
       "linkedName": "End of MI 2"
@@ -20,8 +20,8 @@
         "y": 5.566417514601411
       },
       "prevControl": {
-        "x": 1.7916949794013555,
-        "y": 5.578111669043852
+        "x": 1.2067534676689757,
+        "y": 5.566417514601411
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0

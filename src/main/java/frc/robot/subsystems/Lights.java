@@ -4,10 +4,11 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LED;
 import frc.robot.Constants;
+import frc.robot.Constants.LED;
 import frc.robot.RobotContainer;
 
 public class Lights extends SubsystemBase {
@@ -16,6 +17,13 @@ public class Lights extends SubsystemBase {
     DigitalOutput blueAlliance = new DigitalOutput(LED.blueAlliance);
     DigitalOutput ready = new DigitalOutput(LED.Ready);
     Boolean Fire = false;
+
+    Timer s_Timer = new Timer();
+
+    public Lights() {
+        s_Timer.reset();
+        s_Timer.stop();
+    }
 
     @Override
     public void periodic() {
@@ -45,7 +53,7 @@ public class Lights extends SubsystemBase {
         if (RobotContainer.mechXbox.getPOV() == 0) {
             if (Math.abs(RobotContainer.s_Hood.getRotation() - Constants.HoodConstants.LobAngle) < 1
                     && Math.abs(RobotContainer.s_Shooter.getVelocity()
-                            - 5700) < 5700 * (0.10)
+                            - Constants.HoodConstants.LobSpeed) < Constants.HoodConstants.LobSpeed * (0.20)
                     && Vision.angle < 5) {
                 ready.set(false);
                 RobotContainer.mechXbox.setRumble(RumbleType.kBothRumble, 1);

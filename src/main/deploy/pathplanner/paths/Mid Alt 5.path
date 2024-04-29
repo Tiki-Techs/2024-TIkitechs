@@ -3,47 +3,53 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7155331803541096,
-        "y": 4.1046482092964185
+        "x": 1.3576779647621067,
+        "y": 5.537862667174266
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6453682536994725,
-        "y": 4.163118981515402
+        "x": 1.9530520890358793,
+        "y": 5.951907954867875
       },
       "isLocked": false,
-      "linkedName": "FI 1"
+      "linkedName": "MI 4"
     },
     {
       "anchor": {
-        "x": 0.79769185179396,
-        "y": 4.420390379242297
+        "x": 2.8006421808568094,
+        "y": 6.8833293011004075
       },
       "prevControl": {
-        "x": 1.475952809455476,
-        "y": 4.0110949737569
+        "x": 2.4301341789214703,
+        "y": 6.473855009229636
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "FI 2"
+      "linkedName": "MI 5"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
+    "maxVelocity": 4.0,
     "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.06848815949227,
-    "rotateFast": false
+    "rotation": 47.16107948822635,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Feeder Inside",
+  "folder": "Mid Inside",
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

@@ -11,10 +11,7 @@ import java.util.Map.Entry;
 
 import com.pathplanner.lib.util.PIDConstants;
 
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Shooter.State;
-import swervelib.math.Matter;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -45,8 +42,8 @@ public final class Constants {
     public static final int m_LeaderID = 9;
     public static final int m_FollowerID = 10;
 
+    public static final int IRSensor = 9;
     public static final int m_IndexID = 15;
-public static final int IRSensor_ID = 9;
     public static final List<Entry<Double, State>> SHOOTER_MAP = Arrays.asList(
         Map.entry(0.0, new State(4000, 57)),
         Map.entry(1.54, new State(4000, 60)),
@@ -83,7 +80,8 @@ public static final int IRSensor_ID = 9;
     public static final double lowerLimit = 32.0;
 
     public static final double AutoOffset = 1.5;
-    public static final double LobAngle = 45;
+    public static final double LobAngle = 35;
+    public static final double LobSpeed = 3250;
     public static final int EncoderID = 6;
   }
 

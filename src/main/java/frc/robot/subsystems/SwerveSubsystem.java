@@ -7,8 +7,6 @@ package frc.robot.subsystems;
 import java.io.File;
 import java.util.function.DoubleSupplier;
 
-import org.photonvision.PhotonCamera;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
@@ -27,6 +25,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -51,7 +50,7 @@ public class SwerveSubsystem extends SubsystemBase {
   /**
    * Maximum speed of the robot in meters per second, used to limit acceleration.
    */
-  public double maximumSpeed = Units.feetToMeters(14.5);
+  public double maximumSpeed = Units.feetToMeters(15);
 
   private boolean DirectAngleDrive = true;
   StructPublisher<Pose2d> publisher = NetworkTableInstance.getDefault().getStructTopic("/MyPose", Pose2d.struct)
@@ -387,6 +386,7 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     publisher.set(getPose());
+    SmartDashboard.putNumber("Pitch", getPitch().getDegrees());
   }
 
   @Override

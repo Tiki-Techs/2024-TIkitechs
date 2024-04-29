@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.RobotContainer;
 
 public class Climb extends SubsystemBase {
 
@@ -30,32 +31,37 @@ public class Climb extends SubsystemBase {
     }
 
     public void move(double speed) {
-        if (Math.abs(speed) < OperatorConstants.DEADBAND) {
-            lifted1 = true;
-            lifted2 = true;
-            if (!reversed1) {
-                leadForward *= -1;
-                reversed1 = true;
+        if (!(Math.abs(RobotContainer.drivebase.getPitch().getDegrees()) > 8)) {
+            if (Math.abs(speed) < OperatorConstants.DEADBAND) {
+                lifted1 = true;
+                lifted2 = true;
+                if (!reversed1) {
+                    leadForward *= -1;
+                    reversed1 = true;
+                }
+                if (!reversed2) {
+                    followForward *= -1;
+                    reversed2 = true;
+                }
+            } else {
+                reversed1 = false;
+                reversed2 = false;
             }
-            if (!reversed2) {
-                followForward *= -1;
-                reversed2 = true;
-            }
-        } else {
-            reversed1 = false;
-            reversed2 = false;
-        }
-        speed = speed * 0.5;
-        if (lifted2 == true || (FollowClimbLimit.get())) {
-            m_follow.set(speed * followForward);
-        } else {
-            m_follow.set(0);
-        }
 
-        if (lifted1 == true || (LeadClimbLimit.get())) {
-            m_lead.set(speed * leadForward);
+            if (lifted2 == true || (FollowClimbLimit.get())) {
+                m_follow.set(speed * followForward);
+            } else {
+                m_follow.set(0);
+            }
+
+            if (lifted1 == true || (LeadClimbLimit.get())) {
+                m_lead.set(speed * leadForward);
+            } else {
+                m_lead.set(0);
+            }
         } else {
             m_lead.set(0);
+            m_follow.set(0);
         }
     }
 

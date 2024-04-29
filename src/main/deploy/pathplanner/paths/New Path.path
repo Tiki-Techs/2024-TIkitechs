@@ -3,47 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7155331803541096,
-        "y": 4.1046482092964185
+        "x": 0.5521146085027211,
+        "y": 2.654573058433867
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6453682536994725,
-        "y": 4.163118981515402
+        "x": 1.0432690950835306,
+        "y": 3.052174309481954
       },
       "isLocked": false,
-      "linkedName": "FI 1"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.79769185179396,
-        "y": 4.420390379242297
+        "x": 0.8678567784485995,
+        "y": 4.163118981508619
       },
       "prevControl": {
-        "x": 1.475952809455476,
-        "y": 4.0110949737569
+        "x": 1.0666574039684107,
+        "y": 3.5433287960593027
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "FI 2"
+      "linkedName": "Citrus1"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.5,
+    "maxVelocity": 4.0,
     "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.06848815949227,
-    "rotateFast": false
+    "rotation": -60.01836063115053,
+    "rotateFast": true
   },
   "reversed": false,
-  "folder": "Feeder Inside",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

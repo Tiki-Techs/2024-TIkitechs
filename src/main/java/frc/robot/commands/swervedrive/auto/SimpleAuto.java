@@ -100,11 +100,6 @@ public class SimpleAuto extends Command {
     m_timer.stop();
     done = true;
 
-    // if(xAxis == 0 && yAxis == 0 && rotAxis == 0){
-    // swerve.zeroModules();
-    // swerve.stopModules();
-    // }
-
   }
 
   // Called once the command ends or is interrupted.
